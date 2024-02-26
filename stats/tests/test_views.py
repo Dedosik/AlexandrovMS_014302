@@ -8,7 +8,6 @@ from checks.models import News
 class StatsTest(TestCase):
 
     def setUp(self):
-
         self.user = User.objects.create(username='tester', is_staff=True)
         self.user.set_password('1')
         self.user.save()
@@ -83,3 +82,13 @@ class StatsTest(TestCase):
     def test_check_delete(self):
         self.client.post(reverse("checks-delete", kwargs={"pk": News.objects.last().pk}))
         self.assertEqual(News.objects.count(), 1)
+
+    def test_user_view(self):
+        self.user = User.objects.create(username='new_user')
+        self.user.set_password('12')
+        self.user.save()
+        response = self.client.get(reverse("users"))
+        self.assertEqual(response.status_code, 200)
+        users = response.context.get("users")
+        self.assertIsNotNone(users)
+        self.assertEqual(users.count(), 1)
