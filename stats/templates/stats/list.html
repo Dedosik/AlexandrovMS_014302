@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block page_title %}Пользователи{% endblock %}
+
+{% block content %}
+<div class="section container">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h1>Пользователи</h1>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="search" name="q" placeholder="Поиск" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+              <a href="{% url 'users' %}" class="btn btn-outline-warning ml-2 my-2 my-sm-0" type="submit">Сбросить поиск</a>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table mt-5">
+                <thead>
+                    <tr>
+                        {% for title, order in titles.items %}
+                        <th scope="col" class="{% if order == request.GET.order_by or order in request.GET.order_by and request.GET.order_by.0 == '-'  %}bg-light{% endif %}">
+                            <a
+                                href="{% if not request.GET.order_by.0 == '-' or order not in request.GET.order_by %}?order_by={% if request.GET.order_by == order %}-{% endif %}{{ order }}{% else %}{% url 'users' %}{% endif %}">
+                            {{ title }}
+                            </a>
+                        </th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <th scope="row"><a href="{% url 'users-edit' user.id %}">{{ user.id }}</a></th>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.first_name|default:"-" }}</td>
+                        <td>{{ user.last_name|default:"-" }}</td>
+                        <td>{{ user.profile.middle_name|default_if_none:"-" }}</td>
+                        <td>{{ user.profile.free_checks }}</td>
+                        <td>
+                            {% if user.profile.subscribed %}
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path fill="#07f223" d="M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z"/></svg>
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#ed0707}</style><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'users-create' %}" class="btn btn-primary text-white">Создать</a>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+{% endblock %}

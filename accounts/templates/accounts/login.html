@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block page_title %}Вход{% endblock %}
+
+{% block content %}
+<div class="section container">
+    <div class="row justify-content-center">
+        <div class="col">
+            <h1>Вход</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form class="mt-5" action="." method="POST">
+                {% csrf_token %}
+
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{field.id_for_label}}">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Войти</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <a href="{% url 'registration' %}" class="btn btn-secondary text-white mt-2">Зарегитрироваться</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
